@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form onsubmit="Change_Currency(event)">
+        <div>
+            <p>Amount</p>
+            <input type="number" id="amount">
+        </div>
+        <div>
+            <p>From Currency</p>
+            <select name="From_Currency" id="From_Currency">
+                <option value="VND">VietNam</option>
+                <option value="USD">USD</option>
+            </select>
+        </div>
+        <div>
+            <p>To Currency</p>
+            <select name="To_Currency" id="To_Currency">
+                <option value="USD">USD</option>
+                <option value="VND">VietNam</option>
+            </select>
+        </div>
+        <br>
+        <div>
+            <button type="submit">Change Currency</button>
+        </div>
+    </form>
+    <script>    
+
+        function formattedAmount(amount, currency) {
+            switch (currency) {
+                case 'USD':
+                    let formattedUSD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(amount);
+                    console.log(formattedUSD);
+                    break;
+                case 'VND':
+                    let formattedVND = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 3 }).format(amount);
+                    console.log(formattedVND);
+                    break;
+            }
+        }
+        
+        function Change_Currency(event) {
+            event.preventDefault();
+            let fromCurrency = document.getElementById("From_Currency").value;
+            let toCurrency = document.getElementById("To_Currency").value;
+            let amount = parseFloat(document.getElementById("amount").value);
+
+            // try {
+            //     const response = await fetch('http://localhost:3000/convert', {
+            //         method: 'POST',
+            //         headers: {
+            //             'Content-Type': 'application/json'
+            //         },
+            //         body: JSON.stringify({ fromCurrency, toCurrency, amount })
+            //     });
+
+            //     const data = await response.json();
+            //     if (response.ok) {
+            //         console.log('Converted Amount:', data.convertedAmount);
+            //     } else {
+            //         console.error('Error:', data.error);
+            //     }
+            // } catch (error) {
+            //     console.error('Error:', error);
+            // }
+
+            switch (fromCurrency) {
+                case "USD":
+                    if (toCurrency != fromCurrency) {
+                        amount *= 20000;
+                        formattedAmount(amount, toCurrency);
+                    }
+                    else {
+                        formattedAmount(amount, fromCurrency);
+                    }
+                    break;
+                case "VND":
+                    if (toCurrency != fromCurrency) {
+                        amount /= 20000;
+                        formattedAmount(amount, toCurrency);
+                    }
+                    else {
+                        formattedAmount(amount, fromCurrency);
+                    }
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>
