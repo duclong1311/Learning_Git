@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Sản Phẩm</title>
+</head>
+<body>
+    <input type="text" id="name-search" placeholder="search" oninput="searchName()">
+    <h2>Thêm mới</h2>
+    <input type="text" id="new-product" placeholder="new-product">
+    <div id="btn">
+        <button id="add-new-product">Add</button>
+    </div>
+
+    <h2>Danh sách sản phẩm</h2>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th colspan="2">Action</th>
+        </tr>
+        <tbody id="list-product">
+            
+        </tbody>
+    </table>
+    <script src="index.js"></script>
+</body>
+</html>
