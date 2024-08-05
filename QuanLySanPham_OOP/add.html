@@ -1,19 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Add</title>
 </head>
-
 <body>
-    <div>   
-        <a href="add.html">Thêm sản phẩm mới</a>
-        <a href="index.html">Trang chủ</a>
-    </div>
-    <h3>TÌm kiếm</h3>
-    <input type="text" id="name-search" oninput="getByName()" placeholder="search">
     <h3>Add product</h3>
     <input type="number" id="product-id" placeholder="Nhập id">
     <input type="text" id="product-name" placeholder="Nhập tên">
@@ -22,21 +14,9 @@
     <div id="btn">
         <button onclick="add()">Add</button>
     </div>
-    <h3>List products</h3>
-    <table border="1">
-        <tr>
-            <td>Id</td>
-            <td>Name</td>
-            <td>Price</td>
-            <td>Image</td>
-        </tr>
-        <tbody id="list-product">
-        </tbody>
-    </table>
 
     <script src="Product.js"></script>
     <script src="Store.js"></script>
     <script src="index.js"></script>
 </body>
-
 </html>

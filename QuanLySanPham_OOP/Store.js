@@ -40,4 +40,15 @@ class Store {
             this.listProduct = list;
         }
     }
+    getByName(name) {
+        const list = [];
+        for (let i = 0; i < this.listProduct.length; i++) {
+            const nameProduct = this.listProduct[i].name.toLowerCase();
+            const nameSearch = name.toLowerCase();
+            if (nameProduct.include(nameSearch)) {
+                list.push(this.listProduct[i]);
+            }
+        }
+        return list;
+    }
 }
