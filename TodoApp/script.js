@@ -14,6 +14,7 @@ const taskData = [];
 let currentTask = {};
 
 const addOrUpdateTask = () => {
+  //tìm kiếm một phần tử trong mảng taskData đảm bảo duy nhất.
   const dataArrIndex = taskData.findIndex((item) => item.id === currentTask.id);
   const taskObj = {
     id: `${titleInput.value.toLowerCase().split(" ").join("-")}-${Date.now()}`,
@@ -22,6 +23,7 @@ const addOrUpdateTask = () => {
     description: descriptionInput.value,
   };
 
+  //nếu không tìm thấy trong taskData thì thêm vào taskObj vào.
   if (dataArrIndex === -1) {
     taskData.unshift(taskObj);
   }
@@ -30,12 +32,14 @@ const addOrUpdateTask = () => {
   reset()
 };
 
+//Hiển thị task đã nhập lên màn hình chính.
 const updateTaskContainer = () => {
   tasksContainer.innerHTML = "";
 
- taskData.forEach(
+  //Sử dụng forEach vào mảng taskData. Array destructuring chia làm 4 thuộc tính và hiển thị ra màn hình.
+  taskData.forEach(
     ({ id, title, date, description }) => {
-        (tasksContainer.innerHTML += `
+      (tasksContainer.innerHTML += `
         <div class="task" id="${id}">
           <p><strong>Title:</strong> ${title}</p>
           <p><strong>Date:</strong> ${date}</p>
@@ -48,10 +52,12 @@ const updateTaskContainer = () => {
   );
 };
 
+//Delete task
 const deleteTask = (buttonEl) => {
 
 }
 
+//Clean data vừa nhập.
 const reset = () => {
   titleInput.value = "";
   dateInput.value = "";
@@ -60,10 +66,12 @@ const reset = () => {
   currentTask = {};
 }
 
+//Thêm task mới
 openTaskFormBtn.addEventListener("click", () =>
   taskForm.classList.toggle("hidden")
 );
 
+//Discard unsaved changes if input form contain any datas.
 closeTaskFormBtn.addEventListener("click", () => {
   const formInputsContainValues = titleInput.value || dateInput.value || descriptionInput.value;
   if (formInputsContainValues) {
@@ -73,13 +81,16 @@ closeTaskFormBtn.addEventListener("click", () => {
   }
 });
 
+//Cancel discard unsaved changes
 cancelBtn.addEventListener("click", () => confirmCloseDialog.close());
 
+//Confirm discard unsaved changes
 discardBtn.addEventListener("click", () => {
   confirmCloseDialog.close();
   reset()
 });
 
+//Add new task
 taskForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
