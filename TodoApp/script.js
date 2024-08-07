@@ -10,11 +10,10 @@ const titleInput = document.getElementById("title-input");
 const dateInput = document.getElementById("date-input");
 const descriptionInput = document.getElementById("description-input");
 
-const taskData = [];
+const taskData = JSON.parse(localStorage.getItem("data")) || [];
 let currentTask = {};
 
 const addOrUpdateTask = () => {
-  //tìm kiếm một phần tử trong mảng taskData đảm bảo duy nhất.
   const dataArrIndex = taskData.findIndex((item) => item.id === currentTask.id);
   const taskObj = {
     id: `${titleInput.value.toLowerCase().split(" ").join("-")}-${Date.now()}`,
@@ -23,42 +22,64 @@ const addOrUpdateTask = () => {
     description: descriptionInput.value,
   };
 
-  //nếu không tìm thấy trong taskData thì thêm vào taskObj vào.
   if (dataArrIndex === -1) {
     taskData.unshift(taskObj);
+  } else {
+    taskData[dataArrIndex] = taskObj;
   }
 
+  localStorage.setItem("data", JSON.stringify(taskData));
   updateTaskContainer()
   reset()
 };
 
-//Hiển thị task đã nhập lên màn hình chính.
 const updateTaskContainer = () => {
   tasksContainer.innerHTML = "";
 
-  //Sử dụng forEach vào mảng taskData. Array destructuring chia làm 4 thuộc tính và hiển thị ra màn hình.
   taskData.forEach(
     ({ id, title, date, description }) => {
-      (tasksContainer.innerHTML += `
+        (tasksContainer.innerHTML += `
         <div class="task" id="${id}">
           <p><strong>Title:</strong> ${title}</p>
           <p><strong>Date:</strong> ${date}</p>
           <p><strong>Description:</strong> ${description}</p>
           <button onclick="editTask(this)" type="button" class="btn">Edit</button>
-          <button onclick="deleteTask(this)" type="button" class="btn">Delete</button>
+          <button onclick="deleteTask(this)" type="button" class="btn">Delete</button> 
         </div>
       `)
     }
   );
 };
 
-//Delete task
-const deleteTask = (buttonEl) => {
 
+const deleteTask = (buttonEl) => {
+  const dataArrIndex = taskData.findIndex(
+    (item) => item.id === buttonEl.parentElement.id
+  );
+
+  buttonEl.parentElement.remove();
+  taskData.splice(dataArrIndex, 1);
+  localStorage.setItem("data", JSON.stringify(taskData));
 }
 
-//Clean data vừa nhập.
+const editTask = (buttonEl) => {
+    const dataArrIndex = taskData.findIndex(
+    (item) => item.id === buttonEl.parentElement.id
+  );
+
+  currentTask = taskData[dataArrIndex];
+
+  titleInput.value = currentTask.title;
+  dateInput.value = currentTask.date;
+  descriptionInput.value = currentTask.description;
+
+  addOrUpdateTaskBtn.innerText = "Update Task";
+
+  taskForm.classList.toggle("hidden");  
+}
+
 const reset = () => {
+addOrUpdateTaskBtn.innerText = "Add Task";
   titleInput.value = "";
   dateInput.value = "";
   descriptionInput.value = "";
@@ -66,31 +87,32 @@ const reset = () => {
   currentTask = {};
 }
 
-//Thêm task mới
+if (taskData.length) {
+  updateTaskContainer();
+}
+
 openTaskFormBtn.addEventListener("click", () =>
   taskForm.classList.toggle("hidden")
 );
 
-//Discard unsaved changes if input form contain any datas.
 closeTaskFormBtn.addEventListener("click", () => {
   const formInputsContainValues = titleInput.value || dateInput.value || descriptionInput.value;
-  if (formInputsContainValues) {
+  const formInputValuesUpdated = titleInput.value !== currentTask.title || dateInput.value !== currentTask.date || descriptionInput.value !== currentTask.description;
+
+  if (formInputsContainValues && formInputValuesUpdated) {
     confirmCloseDialog.showModal();
   } else {
     reset();
   }
 });
 
-//Cancel discard unsaved changes
 cancelBtn.addEventListener("click", () => confirmCloseDialog.close());
 
-//Confirm discard unsaved changes
 discardBtn.addEventListener("click", () => {
   confirmCloseDialog.close();
   reset()
 });
 
-//Add new task
 taskForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
