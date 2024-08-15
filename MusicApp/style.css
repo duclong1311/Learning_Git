@@ -14,6 +14,7 @@ body {
     justify-content: space-evenly;
 }
 
+
 .background {
     position: fixed;
     width: 200%;
@@ -47,12 +48,21 @@ body {
 }
 
 .right-container {
+    box-sizing: border-box;
     background-color: #e7e7e7;
     height: 500px;
     width: 400px;
     border-radius: 20px;
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
     transition: all 0.5s ease;
+    overflow-y: auto;  /* Hiển thị thanh cuộn dọc nếu nội dung vượt quá chiều cao */
+    overflow-x: hidden;
+    padding-right: 20px;
+}
+
+.right-container::-webkit-scrollbar {
+    width: 0px; /* Độ rộng của thanh cuộn */
+    background: transparent;
 }
 
 .right-container:hover {
@@ -64,10 +74,27 @@ body {
     flex-direction: column;
     gap: 15px;
     height: 100%;
+    width: 95%;
+    padding: 0px 20px;
 }
 
 .playlist-song {
     display: flex;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: transform 0.2s ease;
+    padding-left: 10px;
+}
+
+.playlist-song:hover {
+    transform: scale(1.05); /* Phóng to nhẹ khi hover */
+}
+
+.playlist-song[aria-current="true"] {
+    background: linear-gradient(45deg, #007bff, #00c6ff); /* Gradient màu */
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .playlist-song button {
