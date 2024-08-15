@@ -44,14 +44,14 @@ const songs = [
     },
     {
         id: 5,
-        path: 'assets/4.mp3',
+        path: 'assets/5.mp3',
         displayName: 'Chúng Ta Rồi Sẽ Hạnh Phúc',
         cover: 'assets/5.jpg',
         artist: 'Jack - J97',
     },
     {
         id: 6,
-        path: 'assets/7.mp3',
+        path: 'assets/6.mp3',
         displayName: 'Cuối Cùng Thì',
         cover: 'assets/6.jpg',
         artist: 'Jack - J97',
@@ -66,7 +66,8 @@ const songs = [
 ];
 
 let userData = {
-    songs: [...songs]
+    songs: [...songs],
+    currentSong: null
 }
 let musicIndex = 0;
 let isPlaying = false;
@@ -94,9 +95,13 @@ const renderSongs = (array) => {
 
 function playsong(id) {
     const song = userData?.songs.find((song) => song.id === id);
-    loadMusic(song);
+    userData.currentSong = song;
+    
+    musicIndex = userData?.songs.findIndex((song) => song.id === id);
+
+    loadMusic(userData.currentSong);
     playMusic();
-    highlightCurrentSong(song.id);
+    highlightCurrentSong(userData.currentSong.id);
 }
 
 function highlightCurrentSong(id) {
@@ -107,15 +112,13 @@ function highlightCurrentSong(id) {
         songEl.removeAttribute("aria-current");
     });
 
-    if (songToHighlight) songToHighlight.setAttribute("aria-current", "true");
+    if (songToHighlight) {
+        songToHighlight.setAttribute("aria-current", "true");
+    }
 }
 
 function togglePlay() {
-    if (isPlaying) {
-        pauseMusic();
-    } else {
-        playMusic();
-    }
+    isPlaying? pauseMusic() : playMusic();
 }
 
 function playMusic() {
@@ -147,6 +150,7 @@ function loadMusic(song) {
 function changeMusic(direction) {
     musicIndex = (musicIndex + direction + songs.length) % songs.length;
     loadMusic(songs[musicIndex]);
+    highlightCurrentSong(songs[musicIndex].id);
     playMusic();
 }
 
@@ -167,6 +171,15 @@ function setProgressBar(e) {
 }
 
 renderSongs(userData?.songs);
+document.addEventListener("DOMContentLoaded", () => {
+    const firstSong = document.querySelector('.playlist-song');
+    console.log(firstSong);
+    if (firstSong) {
+        const firstSongId = firstSong.id.split('-')[1];
+        highlightCurrentSong(firstSongId);
+        console.log(firstSongId);
+    }
+});
 playBtn.addEventListener('click', togglePlay);
 prevBtn.addEventListener('click', () => changeMusic(-1));
 nextBtn.addEventListener('click', () => changeMusic(1));
