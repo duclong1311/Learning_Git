@@ -81,7 +81,7 @@ const renderSongs = (array) => {
                     <span class="playlist-song-title">${song.displayName}</span>
                     <span class="playlist-song-artist">${song.artist}</span>
                 </button>
-                <button class="playlist-song-delete" aria-label="Delete ${song.displayName}">
+                <button class="playlist-song-delete" aria-label="Delete ${song.displayName}" onclick="deleteSong(${song.id})">
                     <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="8" fill="#4d4d62"/>
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M5.32587 5.18571C5.7107 4.90301 6.28333 4.94814 6.60485 5.28651L8 6.75478L9.39515 5.28651C9.71667 4.94814 10.2893 4.90301 10.6741 5.18571C11.059 5.4684 11.1103 5.97188 10.7888 6.31026L9.1832 7.99999L10.7888 9.68974C11.1103 10.0281 11.059 10.5316 10.6741 10.8143C10.2893 11.097 9.71667 11.0519 9.39515 10.7135L8 9.24521L6.60485 10.7135C6.28333 11.0519 5.7107 11.097 5.32587 10.8143C4.94102 10.5316 4.88969 10.0281 5.21121 9.68974L6.8168 7.99999L5.21122 6.31026C4.8897 5.97188 4.94102 5.4684 5.32587 5.18571Z" fill="white"/></svg>
                 </button>
@@ -102,6 +102,37 @@ function playsong(id) {
     loadMusic(userData.currentSong);
     playMusic();
     highlightCurrentSong(userData.currentSong.id);
+}
+
+function deleteSong(id) {
+
+    //Xóa bài hát khỏi mảng
+    const songIndex = userData?.songs.find((song) => song.id === id);
+    if (songIndex !== -1) {
+        userData.songs.splice(songIndex, 1);
+
+        // Update giao diện khi xóa bài hát
+        const songEl = document.getElementById(`song-${id}`);
+        if (songEl) {
+            songEl.remove();
+        }
+        
+        // Nếu xóa bài hát đang phát thì chuyển bài hát tiếp theo hoặc pause.
+        if (userData.currentSong?.id === id) {
+            if (userData.songs.length > 0) {
+                const nextSongIndex = (songIndex.id) % userData.songs.length;
+                console.log(nextSongIndex);
+                const nextSong = userData.songs[nextSongIndex];
+                playsong(nextSong.id);
+            } else {
+                music.pause();
+                userData.currentSong = null;
+                // Thay đổi giao diện nếu cần
+                playBtn.classList.replace('fa-pause', 'fa-play');
+                playBtn.setAttribute('title', 'Play');
+            }
+        }
+    }
 }
 
 function highlightCurrentSong(id) {
@@ -173,11 +204,9 @@ function setProgressBar(e) {
 renderSongs(userData?.songs);
 document.addEventListener("DOMContentLoaded", () => {
     const firstSong = document.querySelector('.playlist-song');
-    console.log(firstSong);
     if (firstSong) {
         const firstSongId = firstSong.id.split('-')[1];
         highlightCurrentSong(firstSongId);
-        console.log(firstSongId);
     }
 });
 playBtn.addEventListener('click', togglePlay);
