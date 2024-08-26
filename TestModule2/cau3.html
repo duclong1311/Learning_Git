@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+
+    function capSochiaHetchoK(arr, k) {
+        let capSo = [];
+        let n = arr.length;
+
+        for (let i = 0; i < n; i++) {
+            for (let j = i + 1; j < n; j++) {
+                if ((arr[i] + arr[j]) % k === 0) {
+                    capSo.push([arr[i], arr[j]]);
+                }
+            }
+        }
+        return capSo;
+    }
+
+    function main() {
+        let n = parseInt(prompt("Nhập số lượng phần tử của mảng (n <= 50):"), 10);
+
+        if (n <= 0 || n > 50) {
+            alert("Số lượng phần tử phải từ 1 đến 50.");
+            return;
+        }
+
+        let arr = [];
+        for (let i = 0; i < n; i++) {
+            arr.push(parseInt(prompt(`Nhập phần tử thứ ${i + 1}:`), 10));
+        }
+
+        let k = parseInt(prompt("Nhập số nguyên dương k:"), 10);
+
+        if (k <= 0) {
+            alert("k phải là số nguyên dương.");
+            return;
+        }
+
+        let capSo = capSochiaHetchoK(arr, k);
+
+        if (capSo.length === 0) {
+            document.write(`Không có cặp số nào có tổng chia hết cho ${k}.`);
+        } else {
+            let message = `Số lượng cặp số có tổng chia hết cho ${k} là: ${capSo.length} <br> Các cặp số là:\n`;
+            capSo.forEach(pair => {
+                message += `(${pair[0]}, ${pair[1]})\n`;
+            });
+            document.write(message);
+        }
+    }
+    main();
+
+</script>
+
+</html>
