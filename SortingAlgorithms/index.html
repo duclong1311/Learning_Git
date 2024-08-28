@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const printArray = (arr) => {
+            for (let i = 0; i < arr.length; i++) {
+                document.write(arr[i] + " ");
+            }
+        };
+
+        const bubbleSort = (arr) => {
+            for (let i = 0; i < arr.length - 1; i++) {
+                for (let j = 0; j < arr.length - i - 1; j++) {
+                    if (arr[j] > arr[j + 1]) {
+                        // Hoán đổi các phần tử
+                        let temp = arr[j];
+                        arr[j] = arr[j + 1];
+                        arr[j + 1] = temp;
+                    }
+                }
+            }
+        };
+
+        const insertionSort = (arr) => {
+            for (let i = 1; i < arr.length; i++) {
+                let key = arr[i];
+                let j = i - 1;
+
+                while (j >= 0 && arr[j] > key) {
+                    arr[j + 1] = arr[j];
+                    j--;
+                }
+                arr[j + 1] = key;
+            }
+        };
+
+        const selectionSort = (arr) => {
+            for (let i = 0; i < arr.length - 1; i++) {
+                let minIndex = i;
+
+                // Tìm phần tử lớn nhất trong phần còn lại của mảng
+                for (let j = i + 1; j < arr.length; j++) {
+                    if (arr[j] < arr[minIndex]) {
+                        minIndex = j;
+                    }
+                }
+
+                // Hoán đổi phần tử lớn nhất với phần tử tại vị trí i
+                if (minIndex !== i) {
+                    let temp = arr[i];
+                    arr[i] = arr[minIndex];
+                    arr[minIndex] = temp;
+                }
+            }
+        };
+
+        const merge = (arr, left, mid, right) => {
+            const n1 = mid - left + 1;
+            const n2 = right - mid;
+            const L = new Array(n1);
+            const R = new Array(n2);
+
+            for (let i = 0; i < n1; i++) L[i] = arr[left + i];
+            for (let j = 0; j < n2; j++) R[j] = arr[mid + 1 + j];
+
+            let i = 0, j = 0;
+            let k = left;
+
+            while (i < n1 && j < n2) {
+                if (L[i] <= R[j]) {
+                    arr[k] = L[i];
+                    i++;
+                } else {
+                    arr[k] = R[j];
+                    j++;
+                }
+                k++;
+            }
+
+            while (i < n1) {
+                arr[k] = L[i];
+                i++;
+                k++;
+            }
+
+            while (j < n2) {
+                arr[k] = R[j];
+                j++;
+                k++;
+            }
+        };
+
+        const mergeSort = (arr, left, right) => {
+            const mid = Math.floor(left + (right - left) / 2);
+            if (left < right) {
+                mergeSort(arr, left, mid);
+                mergeSort(arr, mid + 1, right);
+                merge(arr, left, mid, right);
+            }
+        };
+
+        const partition = (arr, low, high) => {
+
+            const pivot = arr[high];
+
+            let i = low - 1;
+
+            for (let j = low; j < high; j++) {
+                if (arr[j] < pivot) {
+                    i++; 
+                    [arr[i], arr[j]] = [arr[j], arr[i]];
+                }
+            }
+
+            [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
+            return i + 1;
+        };
+
+        const quickSort = (arr, low, high) => {
+            if (low < high) {
+                const pivot = partition(arr, low, high);
+                quickSort(arr, low, pivot - 1);
+                quickSort(arr, pivot + 1, high);
+            }
+        };
+
+        const binarySearch = (arr, low, high, x) => {
+            const mid = Math.floor(low + (high - low) / 2);
+            if (high >= low) {
+                if (arr[mid] === x)
+                    return mid;
+                else if (arr[mid] > x) {
+                    return binarySearch(arr, low, mid - 1, x);
+                } else {
+                    return binarySearch(arr, mid + 1, high, x);
+                }
+            } else {
+                return -1;
+            }
+        };
+
+        const arr = [10, 7, 8, 9, 1, 5];
+
+        // Sắp xếp mảng
+        quickSort(arr, 0, arr.length - 1);
+
+        // Hiển thị mảng đã sắp xếp
+        printArray(arr);
+
+    </script>
+</body>
+
+</html>
